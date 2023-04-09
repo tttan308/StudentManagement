@@ -10,7 +10,6 @@ public class StudentDAO implements DAOInterface<Student>{
     public ArrayList selectAll() {
         ArrayList<Student> ketQua = new ArrayList<Student>();
         try{
-
             Connection con = null;
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=STUDENT_MANAGEMENT;user=sa;password=123;trustServerCertificate=true");

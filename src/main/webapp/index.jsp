@@ -1,3 +1,4 @@
+<%@ page import="model.Account" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -23,23 +24,15 @@
     .red {
       color: red;
     }
-    .setup{
-      margin-left: 2px;
-    }
   </style>
-
-  <!-- Custom styles for this template -->
-  <%
-    String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-            + request.getContextPath();
-  %>
-  <link href="<%=url%>/css/signin.css" rel="stylesheet">
-
 
 </head>
 <body>
+<%
+  int firstTime = 0;
+%>
 <section class="vh-100" style="background-color: #508bfc;">
-  <div class="container py-5 h-100">
+  <form class="container py-5 h-100" action = "sign-in" method="POST">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
@@ -48,12 +41,11 @@
             <h3 class="mb-5">Sign in</h3>
 
             <div class="form-outline mb-4">
-              <input type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="User name"/>
+              <input type="text" id="username" class="form-control form-control-lg" placeholder="User name" name = "username"/>
             </div>
 
             <div class="form-outline mb-4">
-              <input type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Password"/>
-              <label class="form-label" for="typePasswordX-2"></label>
+              <input type="password" id="password" class="form-control form-control-lg" placeholder="Password" name = "password"/>
             </div>
 
             <!-- Checkbox -->
@@ -62,12 +54,26 @@
               <label class="form-check-label mx-2" for="form1Example3">   Remember password </label>
             </div>
 
+
+            <!-- Handle sign in error -->
+            <%
+              if (request.getAttribute("error") != null) {
+                String error = (String) request.getAttribute("error");
+                if (error.equals("Username or password is incorrect")) {%>
+                  <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                  </div>
+                <%}
+                }
+            %>
+            
+
             <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
 
             <hr class="my-4">
 
             <div>
-              <p class="mb-0">Don't have an account? <a href="dangky.jsp" class="text-black-50 fw-bold">Sign Up</a>
+              <p class="mb-0">Don't have an account? <a href="signup.jsp" class="text-black-50 fw-bold">Sign Up</a>
               </p>
             </div>
 
@@ -75,7 +81,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </section>
 </body>
 </html>
