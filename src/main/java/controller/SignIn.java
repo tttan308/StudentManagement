@@ -2,6 +2,7 @@ package controller;
 
 import database.AccountDAO;
 import model.Account;
+import util.EncodePass;
 
 import java.io.IOException;
 
@@ -37,6 +38,9 @@ public class SignIn extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+
+        password = EncodePass.encode(password);
+
 
         Account account = new Account();
         account.setUsername(username);

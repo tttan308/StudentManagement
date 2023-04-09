@@ -61,16 +61,14 @@ public class AccountDAO implements DAOInterface<Account>{
         }catch (Exception e) {
             e.printStackTrace();
         }
+        JDBCUtil.closeConnection(con);
         return 0;
     }
 
     public Account selectByUsernameAndPassword(Account account) {
         Account res = null;
         try{
-            Connection con = null;
-            Driver driver = new com.microsoft.sqlserver.jdbc.SQLServerDriver();
-            DriverManager.registerDriver(driver);
-            con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=STUDENT_MANAGEMENT;user=sa;password=123;trustServerCertificate=true");
+            Connection con = JDBCUtil.getConnection();
             if(con != null){
                 String sql = "SELECT * FROM ACCOUNT WHERE USERNAME = ? AND PASSWORD = ?";
                 PreparedStatement st = con.prepareStatement(sql);
@@ -85,7 +83,7 @@ public class AccountDAO implements DAOInterface<Account>{
                     res = new Account(username1, password1);
                 }
             }
-            con.close();
+            JDBCUtil.closeConnection(con);
         }catch (Exception e) {
             e.printStackTrace();
         }

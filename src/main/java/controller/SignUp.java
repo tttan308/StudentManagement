@@ -2,6 +2,7 @@ package controller;
 
 import database.AccountDAO;
 import model.Account;
+import util.EncodePass;
 
 import java.io.IOException;
 
@@ -53,13 +54,14 @@ public class SignUp extends HttpServlet {
         } else {
             Account account = new Account();
             account.setUsername(username);
-            account.setPassword(password);
+            account.setPassword(EncodePass.encode(password));
             AccountDAO accountDAO = new AccountDAO();
             if (accountDAO.checkAccountExist(account)) {
                 error = "Username already exists!";
                 request.setAttribute("error", error);
                 url = "/signup.jsp";
             } else {
+
                 accountDAO.insert(account);
                 HttpSession session = request.getSession();
                 session.setAttribute("account", account);
