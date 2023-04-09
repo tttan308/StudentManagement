@@ -61,11 +61,10 @@ public class SignUp extends HttpServlet {
                 request.setAttribute("error", error);
                 url = "/signup.jsp";
             } else {
-
                 accountDAO.insert(account);
                 HttpSession session = request.getSession();
                 session.setAttribute("account", account);
-                url = "/body.jsp";
+                url = "/homepage.jsp";
             }
         }
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);

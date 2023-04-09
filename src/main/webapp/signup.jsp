@@ -29,6 +29,7 @@
     %>
     <link href="<%=url%>/css/signup.css" rel="stylesheet">
 </head>
+
 <body>
 <section class="vh-100 bg-image"
          style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">

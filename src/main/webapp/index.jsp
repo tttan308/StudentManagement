@@ -28,9 +28,6 @@
 
 </head>
 <body>
-<%
-  int firstTime = 0;
-%>
 <section class="vh-100" style="background-color: #508bfc;">
   <form class="container py-5 h-100" action = "sign-in" method="POST">
     <div class="row d-flex justify-content-center align-items-center h-100">

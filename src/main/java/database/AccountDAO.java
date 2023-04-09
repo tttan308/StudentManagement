@@ -114,4 +114,18 @@ public class AccountDAO implements DAOInterface<Account>{
         Account acc = accountDAO.selectByUsernameAndPassword(account);
         System.out.println(acc);
     }
+
+    public void updatePassword(Account account) {
+        Connection con =JDBCUtil.getConnection();
+        try{
+            String sql = "UPDATE ACCOUNT SET PASSWORD = ? WHERE USERNAME = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, account.getPassword());
+            st.setString(2, account.getUsername());
+            int rs = st.executeUpdate();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        JDBCUtil.closeConnection(con);
+    }
 }
