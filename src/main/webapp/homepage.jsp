@@ -1,4 +1,6 @@
 <%@ page import="model.Account" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.Student" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -28,39 +30,11 @@
 %>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-2 bg-dark text-light vh-100">
+        <jsp:include page="sidebar.jsp" />
+        <div class="col-10 bg-light text-dark vh-100">
             <div class="d-flex flex-column align-items-center justify-content-between h-100">
                 <div class="p-3">
-                    <a href="homepage.jsp" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-light text-decoration-none">
-                        <span class="fs-4">
-                            <h2 class="text-light">Student Management</h2>
-                        </span>
-                    </a>
-                    <hr>
-                    <ul class="nav flex-column mb-4">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-light">
-                                <h5> Student List </h5>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link text-light">
-                                <h5> Course List </h5>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <hr>
-
-
-                <div class="dropdown py-4 mt-auto ms-auto ms-sm-0">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="d-none d-sm-inline mx-1">Username: <%=username%></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="index.jsp">Sign out</a></li>
-                        <li><a class="dropdown-item" href="changePassword.jsp">ChangePassword</a></li>
-                    </ul>
+                    <h2 class="text-center">Welcome <%=username%> to student management web</h2>
                 </div>
             </div>
         </div>

@@ -19,8 +19,4 @@ public class EncodePass {
         }
         return res;
     }
-
-    public static void main(String[] args) {
-        System.out.println(encode("123"));
-    }
 }

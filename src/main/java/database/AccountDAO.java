@@ -29,7 +29,7 @@ public class AccountDAO implements DAOInterface<Account>{
     }
     @Override
     public int insert(Account account) {
-        Connection con =JDBCUtil.getConnection();
+        Connection con = JDBCUtil.getConnection();
         try{
             String sql = "INSERT INTO ACCOUNT VALUES(?, ?)";
             PreparedStatement st = con.prepareStatement(sql);
@@ -74,8 +74,6 @@ public class AccountDAO implements DAOInterface<Account>{
                 PreparedStatement st = con.prepareStatement(sql);
                 st.setString(1, account.getUsername());
                 st.setString(2, account.getPassword());
-                System.out.println(account.getUsername());
-                System.out.println(account.getPassword());
                 ResultSet rs = st.executeQuery();
                 while(rs.next()){
                     String username1 = rs.getString("USERNAME");
@@ -106,13 +104,6 @@ public class AccountDAO implements DAOInterface<Account>{
             e.printStackTrace();
         }
         return res;
-    }
-
-    public static void main(String args[]){
-        AccountDAO accountDAO = new AccountDAO();
-        Account account = new Account("tan", "tan");
-        Account acc = accountDAO.selectByUsernameAndPassword(account);
-        System.out.println(acc);
     }
 
     public void updatePassword(Account account) {
