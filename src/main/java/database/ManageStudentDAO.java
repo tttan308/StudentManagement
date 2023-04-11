@@ -76,7 +76,7 @@ public class ManageStudentDAO implements DAOInterface<ManageStudent>{
             while (rs.next()){
                 String id = rs.getString("IDSTU");
                 String name = rs.getString("NAME");
-                float grade = rs.getFloat("GRADE");
+                String grade = rs.getString("GRADE");
                 Date birthday = rs.getDate("BIRTHDAY");
                 String address = rs.getString("ADDRESS");
                 String notes = rs.getString("NOTES");
@@ -99,6 +99,23 @@ public class ManageStudentDAO implements DAOInterface<ManageStudent>{
             st.executeUpdate();
         }catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void update(Student s){
+        Connection con = JDBCUtil.getConnection();
+        try{
+            String sql = "UPDATE MANAGESTUDENT SET NAME = ?, GRADE = ?, BIRTHDAY = ?, ADDRESS = ?, NOTES = ? WHERE IDSTU = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, s.getName());
+            st.setString(2, s.getGrade());
+            st.setDate(3, s.getBirthday());
+            st.setString(4, s.getAddress());
+            st.setString(5, s.getNotes());
+            st.setString(6, s.getId());
+            st.executeUpdate();
+        }catch (Exception e) {
+
         }
     }
     public static void main(String[] args) {

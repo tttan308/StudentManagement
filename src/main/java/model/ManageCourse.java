@@ -4,18 +4,18 @@ public class ManageCourse {
     private String username;
     private String classID;
     private String lecture;
-    private int year;
+    private String year;
     private int semester;
 
     public ManageCourse(){
         username = "";
         classID = "";
         lecture = "";
-        year = 0;
+        year = "";
         semester = 0;
     }
 
-    public ManageCourse(String username, String classID, String lecture, int year, int semester){
+    public ManageCourse(String username, String classID, String lecture, String year, int semester){
         this.username = username;
         this.classID = classID;
         this.lecture = lecture;
@@ -47,11 +47,11 @@ public class ManageCourse {
         this.lecture = lecture;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

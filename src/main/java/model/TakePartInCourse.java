@@ -4,7 +4,7 @@ public class TakePartInCourse {
     private String studentID;
     private String classID;
     private String lecture;
-    private int year;
+    private String year;
     private int semester;
     private float score;
 
@@ -12,12 +12,12 @@ public class TakePartInCourse {
         studentID = "";
         classID = "";
         lecture = "";
-        year = 0;
+        year = "";
         semester = 0;
         score = 0;
     }
 
-    public TakePartInCourse(String studentID, String classID, String lecture, int year, int semester, float score){
+    public TakePartInCourse(String studentID, String classID, String lecture, String year, int semester, float score){
         this.studentID = studentID;
         this.classID = classID;
         this.lecture = lecture;
@@ -50,11 +50,11 @@ public class TakePartInCourse {
         this.lecture = lecture;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

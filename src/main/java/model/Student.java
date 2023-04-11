@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Student {
     private String id;
     private String name;
-    private float grade; //GPA
+    private String grade;
     private Date birthday;
     private String address;
     private String notes;
@@ -13,13 +13,13 @@ public class Student {
     public Student() {
         this.id = "";
         this.name = "";
-        this.grade = 0;
+        this.grade = "";
         this.birthday = null;
         this.address = "";
         this.notes = "";
     }
 
-    public Student(String id, String name, float grade, Date birthday, String address, String notes){
+    public Student(String id, String name, String grade, Date birthday, String address, String notes){
         this.id = id;
         this.name = name;
         this.grade = grade;
@@ -44,11 +44,11 @@ public class Student {
         this.name = name;
     }
 
-    public float getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(float grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 

@@ -18,7 +18,7 @@ public class CourseDAO implements DAOInterface<Course>{
                 String classID = rs.getString("CLASSID");
                 String name = rs.getString("NAME");
                 String lecture = rs.getString("LECTURE");
-                int year = rs.getInt("YEAR");
+                String year = rs.getString("YEAR");
                 int semester = rs.getInt("SEMESTER");
                 String notes = rs.getString("NOTES");
                 int credits = rs.getInt("CREDITS");
@@ -41,11 +41,12 @@ public class CourseDAO implements DAOInterface<Course>{
             st.setString(1, course.getClassID());
             st.setString(2, course.getName());
             st.setString(3, course.getLecture());
-            st.setInt(4, course.getYear());
+            st.setString(4, course.getYear());
             st.setInt(5, course.getSemester());
             st.setString(6, course.getNotes());
             st.setInt(7, course.getCredits());
             int rs = st.executeUpdate();
+            JDBCUtil.closeConnection(con);
             return rs;
         }catch (Exception e) {
             e.printStackTrace();

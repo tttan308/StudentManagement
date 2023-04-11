@@ -21,7 +21,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="courseList.jsp" class="nav-link text-light">
+                    <a href="course?action=show-list" class="nav-link text-light">
                         <h5> Course List </h5>
                     </a>
                 </li>
@@ -34,12 +34,12 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow dropdown-menu-end" aria-labelledby="dropdownUser1">
                 <li>
-                    <a class="dropdown-item" href="account?action=sign-out">Sign out</a>
-                    <input type="hidden" name="action" value="sign-out">
-                </li>
-                <li>
                     <a class="dropdown-item" href="changePassword.jsp">Change Password</a>
                     <input type="hidden" name="action" value="change-password">
+                </li>
+                <li>
+                    <a class="dropdown-item" href="account?action=sign-out">Sign out</a>
+                    <input type="hidden" name="action" value="sign-out">
                 </li>
             </ul>
         </div>

@@ -1,10 +1,10 @@
 package controller;
 
+import database.CourseDAO;
+import database.ManageCourseDAO;
 import database.ManageStudentDAO;
 import database.StudentDAO;
-import model.Account;
-import model.ManageStudent;
-import model.Student;
+import model.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,18 +17,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "Student", urlPatterns = { "/student" })
-public class StudentController extends HttpServlet {
+@WebServlet(name = "Course", urlPatterns = { "/course" })
+public class CourseController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if(action.equals("show-list")){
-            String url = "/student-list.jsp";
+            String url = "/course-list.jsp";
             RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
             rd.forward(request, response);
         }
-        else if(action.equals("add-student")){
+        else if(action.equals("add-course")){
             Add(request, response);
         }
         else if(action.equals("edit-student")){
@@ -40,9 +40,6 @@ public class StudentController extends HttpServlet {
         else if(action.equals("show-course-list-student")){
             ShowAction(request, response);
         }
-        else if(action.equals("find-student")){
-            Find(request, response);
-        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,30 +47,28 @@ public class StudentController extends HttpServlet {
     }
 
     private void Add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        byte[] bytes = request.getParameter("studentName").getBytes(StandardCharsets.ISO_8859_1);
+        byte[] bytes = request.getParameter("courseName").getBytes(StandardCharsets.ISO_8859_1);
         String name = new String(bytes, StandardCharsets.UTF_8);
-        String studentID = request.getParameter("studentID");
-        String grade = request.getParameter("studentGrade");
-        Date birthday = Date.valueOf(request.getParameter("studentBirthday"));
-        bytes = request.getParameter("studentAddress").getBytes(StandardCharsets.ISO_8859_1);
-        String address = new String(bytes, StandardCharsets.UTF_8);
-        bytes = request.getParameter("studentNotes").getBytes(StandardCharsets.ISO_8859_1);
+        String id = request.getParameter("courseID");
+        bytes = request.getParameter("courseLecture").getBytes(StandardCharsets.ISO_8859_1);
+        String lecturer = new String(bytes, StandardCharsets.UTF_8);
+        String year = request.getParameter("courseYear");
+        int semester = Integer.parseInt(request.getParameter("courseSemester"));
+        bytes = request.getParameter("courseNotes").getBytes(StandardCharsets.ISO_8859_1);
         String notes = new String(bytes, StandardCharsets.UTF_8);
+        int credit = Integer.parseInt(request.getParameter("courseCredit"));
 
-        Student student = new Student(studentID, name, grade, birthday, address, notes);
-        StudentDAO studentDAO = new StudentDAO();
-        studentDAO.insert(student);
+        Course course = new Course(id, name, lecturer, year, semester, notes, credit);
+        CourseDAO courseDAO = new CourseDAO();
+        courseDAO.insert(course);
 
         Account account = (Account) request.getSession().getAttribute("account");
         String username = account.getUsername();
-        ManageStudent manageStudent = new ManageStudent(username, studentID);
-        ManageStudentDAO manageStudentDAO = new ManageStudentDAO();
-        manageStudentDAO.insert(manageStudent);
+        ManageCourse manageCourse = new ManageCourse(username, id, lecturer, year, semester);
+        ManageCourseDAO manageCourseDAO = new ManageCourseDAO();
+        manageCourseDAO.insert(manageCourse);
 
-        String url = "/student-list.jsp";
+        String url = "/course-list.jsp";
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
         rd.forward(request, response);
     }
@@ -118,15 +113,6 @@ public class StudentController extends HttpServlet {
         request.setAttribute("year", year);
 
         String url = "/course-list-student.jsp";
-        RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
-        rd.forward(request, response);
-    }
-
-    private void Find(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        byte[] bytes = request.getParameter("studentName").getBytes(StandardCharsets.ISO_8859_1);
-        String studentName = new String(bytes, StandardCharsets.UTF_8);
-        request.setAttribute("studentName", studentName);
-        String url = "/find-student.jsp";
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
         rd.forward(request, response);
     }

@@ -1,5 +1,6 @@
 package database;
 
+import model.Course;
 import model.ManageCourse;
 
 import java.sql.*;
@@ -18,7 +19,7 @@ public class ManageCourseDAO implements DAOInterface<ManageCourse>{
                 String username = rs.getString("USERNAME");
                 String courseID = rs.getString("COURSEID");
                 String lecture = rs.getString("LECTURE");
-                int year = rs.getInt("YEAR");
+                String year = rs.getString("YEAR");
                 int semester = rs.getInt("SEMESTER");
                 ManageCourse manageCourse = new ManageCourse(username, courseID, lecture, year, semester);
                 res.add(manageCourse);
@@ -34,14 +35,15 @@ public class ManageCourseDAO implements DAOInterface<ManageCourse>{
     public int insert(ManageCourse manageCourse) {
         Connection con = JDBCUtil.getConnection();
         try{
-            String sql = "INSERT INTO MANAGECOURSE VALUES(?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO MANAGECOURSE VALUES(?, ?, ?, ?, ?)";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, manageCourse.getUsername());
             st.setString(2, manageCourse.getClassID());
             st.setString(3, manageCourse.getLecture());
-            st.setInt(4, manageCourse.getYear());
+            st.setString(4, manageCourse.getYear());
             st.setInt(5, manageCourse.getSemester());
             int rs = st.executeUpdate();
+            JDBCUtil.closeConnection(con);
             return rs;
         }catch (Exception e) {
             e.printStackTrace();
@@ -58,9 +60,10 @@ public class ManageCourseDAO implements DAOInterface<ManageCourse>{
             st.setString(1, manageCourse.getUsername());
             st.setString(2, manageCourse.getClassID());
             st.setString(3, manageCourse.getLecture());
-            st.setInt(4, manageCourse.getYear());
+            st.setString(4, manageCourse.getYear());
             st.setInt(5, manageCourse.getSemester());
             int rs = st.executeUpdate();
+            JDBCUtil.closeConnection(con);
             return rs;
         }catch (Exception e) {
             e.printStackTrace();
@@ -71,5 +74,31 @@ public class ManageCourseDAO implements DAOInterface<ManageCourse>{
     @Override
     public int update(ManageCourse manageCourse) {
         return 0;
+    }
+
+    public ArrayList<Course> getCourseOfAccount(String username) {
+        Connection con = JDBCUtil.getConnection();
+        ArrayList<Course> res = new ArrayList<Course>();
+        try{
+            String sql = "SELECT COURSE.* FROM MANAGECOURSE JOIN COURSE ON MANAGECOURSE.COURSEID = COURSE.IDCOURSE AND MANAGECOURSE.LECTURE = COURSE.LECTURE AND MANAGECOURSE.YEAR = COURSE.YEAR AND MANAGECOURSE.SEMESTER = COURSE.SEMESTER WHERE MANAGECOURSE.USERNAME = ? ";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                String idCourse = rs.getString("IDCOURSE");
+                String nameCourse = rs.getString("NAME");
+                String lecture = rs.getString("LECTURE");
+                String year = rs.getString("YEAR");
+                int semester = rs.getInt("SEMESTER");
+                String notes = rs.getString("NOTES");
+                int credit = rs.getInt("CREDIT");
+                Course course = new Course(idCourse, nameCourse, lecture, year, semester, notes, credit);
+                res.add(course);
+            }
+            JDBCUtil.closeConnection(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }
