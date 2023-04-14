@@ -71,7 +71,7 @@ public class StudentDAO implements DAOInterface<Student>{
     public void delete(String id){
         Connection con = JDBCUtil.getConnection();
         try{
-            String sql = "DELETE FROM STUDENT WHERE ID = ?";
+            String sql = "DELETE FROM STUDENT WHERE IDSTU = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, id);
             int rs = st.executeUpdate();

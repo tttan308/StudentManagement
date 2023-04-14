@@ -2,8 +2,7 @@ package controller;
 
 import database.CourseDAO;
 import database.ManageCourseDAO;
-import database.ManageStudentDAO;
-import database.StudentDAO;
+import database.TakePartInCourseDAO;
 import model.*;
 
 import java.io.IOException;
@@ -31,16 +30,26 @@ public class CourseController extends HttpServlet {
         else if(action.equals("add-course")){
             Add(request, response);
         }
-        else if(action.equals("edit-student")){
+        else if(action.equals("edit-course")){
             Edit(request, response);
         }
-        else if(action.equals("delete-student")){
+        else if(action.equals("delete-course")){
             Delete(request, response);
         }
-        else if(action.equals("show-course-list-student")){
+        else if(action.equals("find-course")){
+            Find(request, response);
+        }
+        else if(action.equals("show-student-list")){
             ShowAction(request, response);
         }
+        else if(action.equals("add-student-into-course")){
+            AddStudentIntoCourse(request, response);
+        }
+        else if(action.equals("delete-student-from-course")){
+            DeleteStudentFromCourse(request, response);
+        }
     }
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
@@ -74,45 +83,111 @@ public class CourseController extends HttpServlet {
     }
 
     private void Delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        String studentID = request.getParameter("id");
-        ManageStudentDAO manageStudentDAO = new ManageStudentDAO();
-        manageStudentDAO.delete(studentID);
+        String id = request.getParameter("id");
+        String lecture = request.getParameter("lecture");
+        String year = request.getParameter("year");
+        int semester = Integer.parseInt(request.getParameter("semester"));
 
-        String url = "/student-list.jsp";
+        Account account = (Account) request.getSession().getAttribute("account");
+        String username = account.getUsername();
+
+        ManageCourseDAO manageCourseDAO = new ManageCourseDAO();
+        manageCourseDAO.delete(username, id, lecture, year, semester);
+
+        CourseDAO courseDAO = new CourseDAO();
+        courseDAO.delete(id, lecture, year, semester);
+
+        String url = "/course-list.jsp";
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
         rd.forward(request, response);
     }
 
     private void Edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
         byte[] bytes = request.getParameter("name-edit").getBytes(StandardCharsets.ISO_8859_1);
         String name = new String(bytes, StandardCharsets.UTF_8);
-        String grade = request.getParameter("grade-edit");
-        Date birthday = Date.valueOf(request.getParameter("birthday-edit"));
-        bytes = request.getParameter("address-edit").getBytes(StandardCharsets.ISO_8859_1);
-        String address = new String(bytes, StandardCharsets.UTF_8);
+        String id = request.getParameter("id-edit");
+        bytes = request.getParameter("lecture-edit").getBytes(StandardCharsets.ISO_8859_1);
+        String lecturer = new String(bytes, StandardCharsets.UTF_8);
+        String year = request.getParameter("year-edit");
+        int semester = Integer.parseInt(request.getParameter("semester-edit"));
         bytes = request.getParameter("notes-edit").getBytes(StandardCharsets.ISO_8859_1);
         String notes = new String(bytes, StandardCharsets.UTF_8);
+        int credit = Integer.parseInt(request.getParameter("credit-edit"));
 
-        String id = request.getParameter("id-edit");
-        Student student = new Student(id, name, grade, birthday, address, notes);
-        StudentDAO studentDAO = new StudentDAO();
-        studentDAO.update(student);
-        String url = "/student-list.jsp";
+        Course course = new Course(id, name, lecturer, year, semester, notes, credit);
+        CourseDAO courseDAO = new CourseDAO();
+        courseDAO.update(course);
+
+        String url = "/course-list.jsp";
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+        rd.forward(request, response);
+    }
+
+    private void Find(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        byte[] bytes = request.getParameter("nameCourse").getBytes(StandardCharsets.ISO_8859_1);
+        String nameCourse = new String(bytes, StandardCharsets.UTF_8);
+
+        request.setAttribute("nameCourse", nameCourse);
+
+        String url = "/find-course.jsp";
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
         rd.forward(request, response);
     }
 
     private void ShowAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        String studentID = request.getParameter("show-course-list-id");
-        String year = request.getParameter("selected-year");
+        String id = request.getParameter("id");
+        String lecture = request.getParameter("lecture");
+        String year = request.getParameter("year");
+        int semester = Integer.parseInt(request.getParameter("semester"));
 
-        request.setAttribute("id", studentID);
+        request.setAttribute("id", id);
+        request.setAttribute("lecture", lecture);
         request.setAttribute("year", year);
+        request.setAttribute("semester", semester);
 
-        String url = "/course-list-student.jsp";
+        String url = "/show-student-list-of-course.jsp";
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+        rd.forward(request, response);
+    }
+
+    private void AddStudentIntoCourse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String id = request.getParameter("id");
+        String lecture = request.getParameter("lecture");
+        String year = request.getParameter("year");
+        int semester = Integer.parseInt(request.getParameter("semester"));
+        String selectedID = request.getParameter("selected-id");
+        float score = Float.parseFloat(request.getParameter("score"));
+
+        TakePartInCourse takePartInCourse = new TakePartInCourse(selectedID, id, lecture, year, semester, score);
+        TakePartInCourseDAO takePartInCourseDAO = new TakePartInCourseDAO();
+        takePartInCourseDAO.insert(takePartInCourse);
+
+        request.setAttribute("id", id);
+        request.setAttribute("lecture", lecture);
+        request.setAttribute("year", year);
+        request.setAttribute("semester", semester);
+
+        String url = "/show-student-list-of-course.jsp";
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+        rd.forward(request, response);
+    }
+
+    private void DeleteStudentFromCourse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String id = request.getParameter("id");
+        String lecture = request.getParameter("lecture");
+        String year = request.getParameter("year");
+        int semester = Integer.parseInt(request.getParameter("semester"));
+        String idStudent = request.getParameter("studentId");
+
+        TakePartInCourseDAO takePartInCourseDAO = new TakePartInCourseDAO();
+        takePartInCourseDAO.delete(idStudent, id, lecture, year, semester);
+
+        request.setAttribute("id", id);
+        request.setAttribute("lecture", lecture);
+        request.setAttribute("year", year);
+        request.setAttribute("semester", semester);
+
+        String url = "/show-student-list-of-course.jsp";
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
         rd.forward(request, response);
     }

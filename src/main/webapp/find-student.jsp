@@ -139,7 +139,7 @@
 <!-- Modal Show Course List-->
 <div class="modal fade" id="showCourseListStudentModal" tabindex="-1" aria-labelledby="showCourseListStudentModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="student?action=show-course-list-student" method="post">
+    <form action="courses?action=add-student-into-course" method="post">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="showCourseListStudentModalLabel">Chọn năm cần xem</h5>

@@ -101,4 +101,21 @@ public class ManageCourseDAO implements DAOInterface<ManageCourse>{
         }
         return res;
     }
+
+    public void delete(String username, String id, String lecture, String year, int semester) {
+        Connection con =JDBCUtil.getConnection();
+        try{
+            String sql = "DELETE FROM MANAGECOURSE WHERE USERNAME = ? AND COURSEID = ? AND LECTURE = ? AND YEAR = ? AND SEMESTER = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, username);
+            st.setString(2, id);
+            st.setString(3, lecture);
+            st.setString(4, year);
+            st.setInt(5, semester);
+            st.executeUpdate();
+            JDBCUtil.closeConnection(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

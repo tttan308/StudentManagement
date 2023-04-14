@@ -83,6 +83,9 @@ public class StudentController extends HttpServlet {
         ManageStudentDAO manageStudentDAO = new ManageStudentDAO();
         manageStudentDAO.delete(studentID);
 
+        StudentDAO studentDAO = new StudentDAO();
+        studentDAO.delete(studentID);
+
         String url = "/student-list.jsp";
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
         rd.forward(request, response);

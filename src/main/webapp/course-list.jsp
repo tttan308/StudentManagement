@@ -1,5 +1,4 @@
 <%@ page import="model.Account" %>
-<%@ page import="model.ManageCourse" %>
 <%@ page import="database.ManageCourseDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Course" %>
@@ -23,6 +22,47 @@
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
           integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
           crossorigin="anonymous"></script>
+  <style>
+    .table thead th {
+      text-align: center;
+      vertical-align: middle !important;
+    }
+
+    .table tbody tr {
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .table tbody tr:last-child {
+      border-bottom: 0;
+    }
+
+    th {
+      position: relative;
+      cursor: pointer;
+    }
+
+    th::before {
+      right: 8px;
+      border-width: 5px 5px 0 5px;
+      border-color: #000 transparent transparent transparent;
+    }
+
+    th::after {
+      right: 2px;
+      border-width: 0 5px 5px 5px;
+      border-color: transparent transparent #000 transparent;
+    }
+
+    th.desc::before {
+      border-width: 0 5px 5px 5px;
+      border-color: transparent transparent #000 transparent;
+    }
+
+    th.asc::after {
+      border-width: 5px 5px 0 5px;
+      border-color: #000 transparent transparent transparent;
+    }
+  </style>
 </head>
 <body>
 <%
@@ -55,7 +95,7 @@
               <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Mã môn học</th>
-                <th scope="col" onclick="sort(true, 1)" id = "sortName">Tên môn học</th>
+                <th scope="col" onclick="sort(true)" id = "sortName">Tên môn học</th>
                 <th scope="col">Giảng viên</th>
                 <th scope="col">Năm học</th>
                 <th scope="col">Học kỳ</th>
@@ -67,20 +107,21 @@
               <tbody>
               <%
                 for (Course course : courses) {
+                  String idValue = "course-row-" + course.getClassID() + "-" + course.getLecture() + "-" + course.getYear() + "-" + course.getSemester();
               %>
-                <tr>
+                <tr id="<%=idValue%>">
                     <th scope="row"><%= i++ %></th>
-                    <td><%= course.getClassID() %></td>
-                    <td><%= course.getName() %></td>
-                    <td><%= course.getLecture() %></td>
-                    <td><%= course.getYear() %></td>
-                    <td><%= course.getSemester() %></td>
-                    <td><%= course.getNotes() %></td>
-                    <td><%= course.getCredits() %></td>
+                    <td data-info= "course-id"><%= course.getClassID() %></td>
+                    <td data-info= "course-name"><%= course.getName() %></td>
+                    <td data-info= "course-lecture"><%= course.getLecture() %></td>
+                    <td data-info= "course-year"><%= course.getYear() %></td>
+                    <td data-info= "course-semester"><%= course.getSemester() %></td>
+                    <td data-info= "course-notes"><%= course.getNotes() %></td>
+                    <td data-info= "course-credit"><%= course.getCredits() %></td>
                     <td>
-                      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCourseModal" onclick="fillEditModal('<%=course.getClassID()%>, <%=course.getLecture()%>, <%=course.getYear()%>, <%=course.getSemester()%>')">Sửa</button>
+                      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCourseModal" onclick="fillEditModal('<%=course.getClassID()%>', '<%=course.getLecture()%>', '<%=course.getYear()%>', '<%=course.getSemester()%>')">Sửa</button>
                       <a href="course?action=delete-course&id=<%=course.getClassID()%>&lecture=<%=course.getLecture()%>&year=<%=course.getYear()%>&semester=<%=course.getSemester()%>" class="btn btn-danger">Xóa</a>
-                      <button class = "btn btn-success" data-bs-toggle="modal" data-bs-target="#showCourseListcourseModal" onclick="">Xem danh sách học sinh</button>
+                      <a href="course?action=show-student-list&id=<%=course.getClassID()%>&lecture=<%=course.getLecture()%>&year=<%=course.getYear()%>&semester=<%=course.getSemester()%>" class="btn btn-success">Xem danh sách sinh viên</a>
                     </td>
               <%
                 }
@@ -133,7 +174,7 @@
             </div>
             <div class = "mb-3">
               <label for="courseSemester" class="form-label">Học kỳ</label>
-              <input type="text" class="form-control" id="courseSemester" name = "courseSemester" required>
+              <input type="number" class="form-control" id="courseSemester" name = "courseSemester" required>
             </div>
             <div class="mb-3">
               <label for="courseNotes" class="form-label">Ghi chú</label>
@@ -154,5 +195,112 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="course?action=edit-course" method="post">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCourseModalLabel">Chỉnh sửa thông tin môn học</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="editName">Mã môn học</label>
+              <input type="text" class="form-control" id="editID" name="id-edit" readonly>
+            </div>
+            <div class="form-group">
+              <label for="editName">Tên môn học</label>
+              <input type="text" class="form-control" id="editName" name="name-edit" required>
+            </div>
+            <div class="form-group">
+              <label for="editLecture">Giảng viên</label>
+              <input type="text" class="form-control" id="editLecture" name="lecture-edit" readonly>
+            </div>
+            <div class="form-group">
+              <label for="editYear">Năm học</label>
+              <input type="text" class="form-control" id="editYear" name="year-edit" readonly>
+            </div>
+            <div class="form-group">
+              <label for="editSemester">Học kỳ</label>
+              <input type="number" class="form-control" id="editSemester" name="semester-edit" readonly>
+            </div>
+            <div class="form-group">
+              <label for="editNotes">Ghi chú</label>
+              <input type="text" class="form-control" id="editNotes" name="notes-edit">
+            </div>
+            <div class = "mb-3">
+              <label for="courseCredit" class="form-label">Số tín chỉ</label>
+              <input type="number" min = "1" max = "20" step="1.0" class="form-control" id="editCredit" name = "credit-edit">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function fillEditModal(id, lecture, year, semester) {
+    row = "course-row-" + id + "-" + lecture + "-" + year + "-" + semester;
+    console.log(row);
+    const courseRow = document.getElementById(row);
+    const courseID = courseRow.querySelector('[data-info="course-id"]').textContent;
+    const courseName = courseRow.querySelector('[data-info="course-name"]').textContent;
+    const courseLecture = courseRow.querySelector('[data-info="course-lecture"]').textContent;
+    const courseYear = courseRow.querySelector('[data-info="course-year"]').textContent;
+    const courseSemester = courseRow.querySelector('[data-info="course-semester"]').textContent;
+    const courseNotes = courseRow.querySelector('[data-info="course-notes"]').textContent;
+    const courseCredit = courseRow.querySelector('[data-info="course-credit"]').textContent;
+
+    document.getElementById("editID").value = courseID;
+    document.getElementById("editName").value = courseName;
+    document.getElementById("editLecture").value = courseLecture;
+    document.getElementById("editYear").value = courseYear;
+    document.getElementById("editSemester").value = courseSemester;
+    document.getElementById("editNotes").value = courseNotes;
+    document.getElementById("editCredit").value = courseCredit;
+  }
+
+  function sort(reverse){
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("myTable");
+    switching = true;
+    while (switching) {
+      switching = false;
+      rows = table.rows;
+      for (i = 1; i < (rows.length - 3); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("TD")[0];
+        y = rows[i + 1].getElementsByTagName("TD")[0];
+        if (reverse) {
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        } else {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+      }
+    }
+    if(reverse){
+        document.getElementById("sortName").setAttribute("onclick", "sort(false)");
+        } else {
+        document.getElementById("sortName").setAttribute("onclick", "sort(true)");
+    }
+  }
+</script>
 </body>
 </html>
