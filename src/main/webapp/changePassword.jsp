@@ -30,27 +30,22 @@
     <link href="<%=url%>/css/signup.css" rel="stylesheet">
 </head>
 <body>
-<section class="vh-100 bg-image"
-         style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
-    <form class="mask d-flex align-items-center h-100 gradient-custom-3" action = "account" method="post">
-        <input type="hidden" name="action" value="change-password">
+<section class="vh-100">
+    <form class="mask d-flex align-items-center h-100 gradient-custom-3" action = "account?action=change-password" method="post">
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                     <div class="card" style="border-radius: 15px;">
                         <div class="card-body p-5">
-                            <h2 class="text-uppercase text-center mb-5">Change password</h2>
-
+                            <h2 class="text-uppercase text-center mb-5">Thay đổi mật khẩu</h2>
                             <div class="form-outline mb-4">
-                                <input type="password" id="old-password" class="form-control form-control-lg" placeholder="Old password" name = "old-password"/>
+                                <input type="password" id="old-password" class="form-control form-control-lg" placeholder="Mật khẩu cũ" name = "old-password"/>
                             </div>
-
                             <div class="form-outline mb-4">
-                                <input type="password" id="new-password" class="form-control form-control-lg" placeholder="New password" name = "new-password"/>
+                                <input type="password" id="new-password" class="form-control form-control-lg" placeholder="Mật khẩu mới" name = "new-password"/>
                             </div>
-
                             <div class="form-outline mb-4">
-                                <input type="password" id="repeat-new-password" class="form-control form-control-lg" placeholder="Repeat your new password" name ="repeat-new-password"/>
+                                <input type="password" id="repeat-new-password" class="form-control form-control-lg" placeholder="Nhập lại mật khẩu mới" name ="repeat-new-password"/>
                             </div>
 
                             <% if(request.getAttribute("error") != null) { %>
@@ -60,14 +55,11 @@
                             <% } %>
 
                             <div class="d-flex justify-content-center">
-                                <button type="submit"
-                                        class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Change
-                                </button>
+                                <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Thay đổi</button>
                             </div>
-
-                            <p class="text-center text-muted mt-5 mb-0">Return home page - <a href="homepage.jsp"
-                                                                                                    class="fw-bold text-body"><u>Home Page</u></a></p>
-
+                            <p class="text-center text-muted mt-5 mb-0">Về trang chủ -
+                                <a href="homepage.jsp" class="fw-bold text-body"><u>Trang chủ</u></a>
+                            </p>
                         </div>
                     </div>
                 </div>

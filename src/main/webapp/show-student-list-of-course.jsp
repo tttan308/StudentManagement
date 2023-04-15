@@ -1,10 +1,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Student" %>
-<%@ page import="database.ManageStudentDAO" %>
-<%@ page import="model.Account" %>
 <%@ page import="database.TakePartInCourseDAO" %>
-<%@ page import="model.TakePartInCourse" %>
-<%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
@@ -29,7 +25,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link href="./css/homepage.css" rel="stylesheet">
   <style>
-    /* CSS for centering table header and border for table rows */
     .table thead th {
       text-align: center;
       vertical-align: middle !important;
@@ -59,17 +54,6 @@
       border-width: 0 5px 5px 5px;
       border-color: transparent transparent #000 transparent;
     }
-
-    th.desc::before {
-      border-width: 0 5px 5px 5px;
-      border-color: transparent transparent #000 transparent;
-    }
-
-    th.asc::after {
-      border-width: 5px 5px 0 5px;
-      border-color: #000 transparent transparent transparent;
-    }
-
   </style>
 </head>
 <body>
@@ -125,6 +109,7 @@
                     <a href="course?action=delete-student-from-course&id=<%=id%>&lecture=<%=lecture%>&year=<%=year%>&semester=<%=semester%>&studentId=<%=s.getId()%>">
                       <button type="button" class="btn btn-danger">Xóa</button>
                     </a>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editScoreModal" onclick="repID('<%=s.getId()%>')">Sửa điểm</button>
                   </td>
                 </tr>
               <%
@@ -155,7 +140,7 @@
     <form action = "course?action=add-student-into-course&id=<%=id%>&lecture=<%=lecture%>&year=<%=year%>&semester=<%=semester%>" method="post">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="showCourseListStudentModalLabel">Chọn năm cần xem</h5>
+              <h5 class="modal-title" id="showCourseListStudentModalLabel">Chọn sinh viên cần thêm</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -187,8 +172,30 @@
   </div>
 </div>
 
+<div class="modal fade" id="editScoreModal" tabindex="-1" aria-labelledby="editScoreModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action = "course?action=edit-score&id=<%=id%>&lecture=<%=lecture%>&year=<%=year%>&semester=<%=semester%>" method="post">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editScoreModalLabel">Cập nhật điểm mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type = "hidden" class = "" id = "IDedit" name = "id-edit">
+          <div class="form-group">
+            <label for="addScore">Nhập điểm (nếu chưa có điểm nhập 0.0)</label>
+            <input type="number" min = "0.0" max = "10.0" step = "0.1" class="form-control" id="editScore" name="score" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-primary">Cập nhật</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 <script>
-
   function sort(reverse, col) {
     var table, rows, switching, i, x, y, shouldSwitch;
     table = document.getElementById("myTable");
@@ -238,6 +245,10 @@
         document.getElementById("sortGrade").setAttribute("onclick", "sort(true, " +col + ")");
       }
     }
+  }
+
+  function repID(id) {
+    document.getElementById("IDedit").value = id;
   }
 </script>
 </body>

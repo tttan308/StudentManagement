@@ -1,6 +1,4 @@
 <%@ page import="model.Account" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="model.Student" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -34,7 +32,7 @@
         <div class="col-10 bg-light text-dark vh-100">
             <div class="d-flex flex-column align-items-center justify-content-between h-100">
                 <div class="p-3">
-                    <h2 class="text-center">Welcome <%=username%> to student management web</h2>
+                    <h2 class="text-center">Chào mừng <u><%=username%></u> đến student management web</h2>
                 </div>
             </div>
         </div>

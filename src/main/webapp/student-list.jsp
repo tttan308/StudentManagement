@@ -3,13 +3,12 @@
 <%@ page import="database.ManageStudentDAO" %>
 <%@ page import="model.Account" %>
 <%@ page import="database.TakePartInCourseDAO" %>
-<%@ page import="model.TakePartInCourse" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trang chủ</title>
+  <title>Danh sách sinh viên</title>
   <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
   <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -27,25 +26,20 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="./css/homepage.css" rel="stylesheet">
     <style>
-        /* CSS for centering table header and border for table rows */
         .table thead th {
             text-align: center;
             vertical-align: middle !important;
         }
-
         .table tbody tr {
             border-bottom: 1px solid #dee2e6;
         }
-
         .table tbody tr:last-child {
             border-bottom: 0;
         }
-
         th {
             position: relative;
             cursor: pointer;
         }
-
         th::before {
             right: 8px;
             border-width: 5px 5px 0 5px;
@@ -57,17 +51,6 @@
             border-width: 0 5px 5px 5px;
             border-color: transparent transparent #000 transparent;
         }
-
-        th.desc::before {
-            border-width: 0 5px 5px 5px;
-            border-color: transparent transparent #000 transparent;
-        }
-
-        th.asc::after {
-            border-width: 5px 5px 0 5px;
-            border-color: #000 transparent transparent transparent;
-        }
-
     </style>
 </head>
 <body>
@@ -83,25 +66,24 @@
     <jsp:include page="sidebar.jsp" />
     <div class="col-10 bg-light text-dark vh-100">
       <div class="d-flex flex-column align-items-center justify-content-start h-100">
-          <!--Find student-->
-            <div class="p-3">
-                <form action="student?action=find-student" method="post">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Nhập tên sinh viên" name="studentName">
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Tìm kiếm</button>
-                    </div>
-                </form>
-            </div>
-            <div class="d-flex flex-column align-items-center justify-content-center">
-                <div class = "p-3">
+        <div class="p-3">
+            <form action="student?action=find-student" method="post">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Nhập tên sinh viên" name="studentName">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <div class = "p-3">
                 <h1 class="text-center">Danh sách sinh viên</h1>
                 <table class="table table-striped table-bordered table-hover" id = "myTable">
                     <thead class="thead-dark">
                     <tr>
                         <th scope="col">STT</th>
                         <th scope="col">Mã sinh viên</th>
-                        <th scope="col" onclick="sort(true, 1)" id = "sortName">Họ tên</th>
-                        <th scope="col" onclick="sort(true, 2)" id = "sortGrade">Khóa</th>
+                        <th scope="col" onclick="sort(false, 1)" id = "sortName">Họ tên</th>
+                        <th scope="col" onclick="sort(false, 2)" id = "sortGrade">Khóa</th>
                         <th scope="col">Ngày sinh</th>
                         <th scope="col">Địa chỉ</th>
                         <th scope="col">Notes</th>
@@ -132,19 +114,16 @@
                     <tr>
                         <th scope="row"><%= i++ %></th>
                         <td colspan="7" class = "text-center">
-                            <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-                                Thêm sinh viên
-                            </button>
+                            <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">Thêm sinh viên</button>
                         </td>
-                        <tr>
-                        </tr>
+                        <tr></tr>
                     </tr>
                     </tbody>
                 </table>
-                </div>
+            </div>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </div>
 
@@ -205,10 +184,13 @@
                 </div>
                     <div class="modal-body">
                         <form>
-                            <input type="hidden" name="id-edit" id="editId">
                             <div class="form-group">
                                 <label for="editName">Họ tên</label>
                                 <input type="text" class="form-control" id="editName" name="name-edit" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editName">Mã số sinh viên</label>
+                                <input type="text" class="form-control" id="editId" name="id-edit" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="editGrade">Khóa học</label>
@@ -308,18 +290,17 @@
             for (i = 1; i < (rows.length - 3); i++) {
                 shouldSwitch = false;
                 x = rows[i].getElementsByTagName("td")[col];
-                console.log(x);
                 y = rows[i + 1].getElementsByTagName("td")[col];
                 //Chỉ lấy tên
                 xValue = x.textContent.split(" ")[x.textContent.split(" ").length - 1];
                 yValue = y.textContent.split(" ")[y.textContent.split(" ").length - 1];
                 if (reverse) {
-                    if (xValue < yValue) {
+                    if (xValue.localeCompare(yValue) < 0) {
                         shouldSwitch = true;
                         break;
                     }
                 } else {
-                    if (xValue > yValue) {
+                    if (xValue.localeCompare(yValue) > 0) {
                         shouldSwitch = true;
                         break;
                     }

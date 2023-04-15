@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Danh sách khóa học</title>
+    <title>Danh sách môn học</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -46,7 +46,7 @@
                 </div>
                 <div class="d-flex flex-column align-items-center justify-content-center">
                     <div class = "p-3">
-                        <h1 class="text-center">Danh sách khóa học</h1>
+                        <h1 class="text-center">Danh sách môn học</h1>
                         <table class="table table-striped table-bordered table-hover" id = "myTable">
                             <thead class="thead-dark">
                             <tr>
@@ -78,7 +78,7 @@
                                 <td>
                                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCourseModal" onclick="fillEditModal('<%=course.getClassID()%>', '<%=course.getLecture()%>', '<%=course.getYear()%>', '<%=course.getSemester()%>')">Sửa</button>
                                     <a href="course?action=delete-course&id=<%=course.getClassID()%>&lecture=<%=course.getLecture()%>&year=<%=course.getYear()%>&semester=<%=course.getSemester()%>" class="btn btn-danger">Xóa</a>
-                                    <button class = "btn btn-success" data-bs-toggle="modal" data-bs-target="#showStudentListModal" onclick="">Xem danh sách học sinh</button>
+                                    <a href="course?action=show-student-list&id=<%=course.getClassID()%>&lecture=<%=course.getLecture()%>&year=<%=course.getYear()%>&semester=<%=course.getSemester()%>" class="btn btn-success">Xem danh sách sinh viên</a>
                                 </td>
                                 <%
                                     }
@@ -195,35 +195,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="showStudentListModal" tabindex="-1" aria-labelledby="showStudentListModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form action="course?action=show-student-list" method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="showStudentListModalLabel">Danh sách sinh viên</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <input type="hidden" name="show-course-list-id" id="show-course-list-id">
-                        <%
-                        %>
-                        <div class="form-group">
-                            <label for="selectYear">Chọn năm</label>
-                            <select class="form-control" id="selectYear" name="selected-year">
-
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary">Xem danh sách khóa học</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 <script>
     function fillEditModal(id, lecture, year, semester) {
         row = "course-row-" + id + "-" + lecture + "-" + year + "-" + semester;

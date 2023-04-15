@@ -36,6 +36,7 @@ public class AccountDAO implements DAOInterface<Account>{
             st.setString(1, account.getUsername());
             st.setString(2, account.getPassword());
             int rs = st.executeUpdate();
+            JDBCUtil.closeConnection(con);
             return rs;
         }catch (Exception e) {
             e.printStackTrace();
@@ -57,11 +58,11 @@ public class AccountDAO implements DAOInterface<Account>{
             st.setString(1, account.getPassword());
             st.setString(2, account.getUsername());
             int rs = st.executeUpdate();
+            JDBCUtil.closeConnection(con);
             return rs;
         }catch (Exception e) {
             e.printStackTrace();
         }
-        JDBCUtil.closeConnection(con);
         return 0;
     }
 

@@ -58,7 +58,7 @@ public class AccountController extends HttpServlet {
             session.setAttribute("account", acc);
             url = "/homepage.jsp";
         } else {
-            request.setAttribute("error", "Username or password is incorrect");
+            request.setAttribute("error", "Tài khoản hoặc mật khẩu không chính xác!");
             url = "/index.jsp";
         }
         RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
@@ -73,11 +73,11 @@ public class AccountController extends HttpServlet {
         String error = "";
 
         if (username.equals("") || password.equals("") || repeatPassword.equals("")) {
-            error = "Please fill in all the fields!";
+            error = "Vui lòng điền đẩy đủ thông tin!";
             request.setAttribute("error", error);
             url = "/signup.jsp";
         } else if (!password.equals(repeatPassword)) {
-            error = "Password does not match!";
+            error = "Mật khẩu nhập lại không khớp!";
             request.setAttribute("error", error);
             url = "/signup.jsp";
         } else {
@@ -86,7 +86,7 @@ public class AccountController extends HttpServlet {
             account.setPassword(EncodePass.encode(password));
             AccountDAO accountDAO = new AccountDAO();
             if (accountDAO.checkAccountExist(account)) {
-                error = "Username already exists!";
+                error = "Tài khoản đã tồn tại, vui lòng chọn tên tài khoản khác!";
                 request.setAttribute("error", error);
                 url = "/signup.jsp";
             } else {
@@ -109,11 +109,11 @@ public class AccountController extends HttpServlet {
         String error = "";
 
         if (oldPassword.equals("") || newPassword.equals("") || repeatPassword.equals("")) {
-            error = "Please fill in all the fields!";
+            error = "PVui lòng điền đẩy đủ thông tin!";
             request.setAttribute("error", error);
             url = "/changePassword.jsp";
         } else if (!newPassword.equals(repeatPassword)) {
-            error = "Password does not match!";
+            error = "Mật khẩu nhập lại không khớp!";
             request.setAttribute("error", error);
             url = "/changePassword.jsp";
         } else {
@@ -125,7 +125,7 @@ public class AccountController extends HttpServlet {
                 accountDAO.updatePassword(account);
                 url = "/homepage.jsp";
             } else {
-                error = "Old password is incorrect!";
+                error = "Mật khẩu cũ không chính xác!";
                 request.setAttribute("error", error);
                 url = "/changePassword.jsp";
             }

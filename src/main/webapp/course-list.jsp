@@ -7,7 +7,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trang chủ</title>
+  <title>Dánh sách môn học</title>
   <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
   <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
@@ -95,7 +95,7 @@
               <tr>
                 <th scope="col">STT</th>
                 <th scope="col">Mã môn học</th>
-                <th scope="col" onclick="sort(true)" id = "sortName">Tên môn học</th>
+                <th scope="col" onclick="sort(false)" id = "sortName">Tên môn học</th>
                 <th scope="col">Giảng viên</th>
                 <th scope="col">Năm học</th>
                 <th scope="col">Học kỳ</th>
@@ -130,7 +130,7 @@
                 <th scope="row"><%= i++ %></th>
                 <td colspan="9" class = "text-center">
                   <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">
-                    Thêm khóa học
+                    Thêm môn học
                   </button>
                 </td>
               <tr>
@@ -276,15 +276,17 @@
       rows = table.rows;
       for (i = 1; i < (rows.length - 3); i++) {
         shouldSwitch = false;
-        x = rows[i].getElementsByTagName("TD")[0];
-        y = rows[i + 1].getElementsByTagName("TD")[0];
+        x = rows[i].getElementsByTagName("td");
+        y = rows[i + 1].getElementsByTagName("td");
+        xValue = x[1].textContent;
+        yValue = y[1].textContent;
         if (reverse) {
-          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          if (xValue.localeCompare(yValue) < 0) {
             shouldSwitch = true;
             break;
           }
         } else {
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          if (xValue.localeCompare(yValue) > 0) {
             shouldSwitch = true;
             break;
           }

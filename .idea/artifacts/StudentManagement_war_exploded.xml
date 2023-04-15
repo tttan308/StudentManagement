@@ -1,0 +1,30 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="StudentManagement:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/StudentManagement_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="StudentManagement" />
+          <element id="library" level="application" name="jquery-3.6.0" />
+          <element id="library" level="application" name="bootstrap" />
+          <element id="library" level="application" name="@popperjs/core" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.microsoft.sqlserver:mssql-jdbc:12.2.0.jre11" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.0.0" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot:3.0.0" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:6.0.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jcl:6.0.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:6.0.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:6.0.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:6.0.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:6.0.2" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="StudentManagement/web/Web" />
+      <element id="directory" name="Resources">
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/webapp" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -48,6 +48,9 @@ public class CourseController extends HttpServlet {
         else if(action.equals("delete-student-from-course")){
             DeleteStudentFromCourse(request, response);
         }
+        else if(action.equals("edit-score")){
+            EditScore(request, response);
+        }
     }
 
 
@@ -93,6 +96,9 @@ public class CourseController extends HttpServlet {
 
         ManageCourseDAO manageCourseDAO = new ManageCourseDAO();
         manageCourseDAO.delete(username, id, lecture, year, semester);
+
+        TakePartInCourseDAO takePartInCourseDAO = new TakePartInCourseDAO();
+        takePartInCourseDAO.deleteCourseOfTakePartIn(id, lecture, year, semester);
 
         CourseDAO courseDAO = new CourseDAO();
         courseDAO.delete(id, lecture, year, semester);
@@ -181,6 +187,28 @@ public class CourseController extends HttpServlet {
 
         TakePartInCourseDAO takePartInCourseDAO = new TakePartInCourseDAO();
         takePartInCourseDAO.delete(idStudent, id, lecture, year, semester);
+
+        request.setAttribute("id", id);
+        request.setAttribute("lecture", lecture);
+        request.setAttribute("year", year);
+        request.setAttribute("semester", semester);
+
+        String url = "/show-student-list-of-course.jsp";
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+        rd.forward(request, response);
+    }
+
+    private void EditScore(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String id = request.getParameter("id");
+        String lecture = request.getParameter("lecture");
+        String year = request.getParameter("year");
+        int semester = Integer.parseInt(request.getParameter("semester"));
+        float score = Float.parseFloat(request.getParameter("score"));
+        String idStu = request.getParameter("id-edit");
+        TakePartInCourse takePartInCourse = new TakePartInCourse(idStu, id, lecture, year, semester, score);
+
+        TakePartInCourseDAO takePartInCourseDAO = new TakePartInCourseDAO();
+        takePartInCourseDAO.update(takePartInCourse);
 
         request.setAttribute("id", id);
         request.setAttribute("lecture", lecture);

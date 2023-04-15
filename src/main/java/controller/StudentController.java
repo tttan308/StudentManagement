@@ -2,6 +2,7 @@ package controller;
 
 import database.ManageStudentDAO;
 import database.StudentDAO;
+import database.TakePartInCourseDAO;
 import model.Account;
 import model.ManageStudent;
 import model.Student;
@@ -82,6 +83,9 @@ public class StudentController extends HttpServlet {
         String studentID = request.getParameter("id");
         ManageStudentDAO manageStudentDAO = new ManageStudentDAO();
         manageStudentDAO.delete(studentID);
+
+        TakePartInCourseDAO takePartInCourseDAO = new TakePartInCourseDAO();
+        takePartInCourseDAO.deleteByID(studentID);
 
         StudentDAO studentDAO = new StudentDAO();
         studentDAO.delete(studentID);

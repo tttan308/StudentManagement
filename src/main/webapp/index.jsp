@@ -34,29 +34,22 @@
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
           <div class="card-body p-5 text-center">
-
-            <h3 class="mb-5">Sign in</h3>
-
+            <h3 class="mb-5">Đăng nhập</h3>
             <div class="form-outline mb-4">
-              <input type="text" id="username" class="form-control form-control-lg" placeholder="User name" name = "username"/>
+              <input type="text" id="username" class="form-control form-control-lg" placeholder="Tài khoản" name = "username"/>
             </div>
-
             <div class="form-outline mb-4">
-              <input type="password" id="password" class="form-control form-control-lg" placeholder="Password" name = "password"/>
+              <input type="password" id="password" class="form-control form-control-lg" placeholder="Mật khẩu" name = "password"/>
             </div>
-
-            <!-- Checkbox -->
             <div class="form-check d-flex justify-content-start mb-4">
               <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-              <label class="form-check-label mx-2" for="form1Example3">   Remember password </label>
+              <label class="form-check-label mx-2" for="form1Example3">   Nhớ tài khoản </label>
             </div>
 
-
-            <!-- Handle sign in error -->
             <%
               if (request.getAttribute("error") != null) {
                 String error = (String) request.getAttribute("error");
-                if (error.equals("Username or password is incorrect")) {%>
+                if (error.equals("Tài khoản hoặc mật khẩu không chính xác!")) {%>
                   <div class="alert alert-danger" role="alert">
                     <%= error %>
                   </div>
@@ -64,16 +57,12 @@
                 }
             %>
 
-
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Đăng nhập</button>
             <hr class="my-4">
-
             <div>
-              <p class="mb-0">Don't have an account? <a href="signup.jsp" class="text-black-50 fw-bold">Sign Up</a>
+              <p class="mb-0">Chưa có tài khoản? <a href="signup.jsp" class="text-black-50 fw-bold">Đăng kí</a>
               </p>
             </div>
-
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 package database;
 
+import model.Course;
 import model.Student;
 import model.TakePartInCourse;
 
@@ -75,6 +76,21 @@ public class TakePartInCourseDAO implements DAOInterface<TakePartInCourse>{
 
     @Override
     public int update(TakePartInCourse takePartInCourse) {
+        Connection con = JDBCUtil.getConnection();
+        try{
+            String sql = "UPDATE TAKEPARTINCOURSE SET SCORE = ? WHERE STUID = ? AND COURSEID = ? AND LECTURE = ? AND YEAR = ? AND SEMESTER = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setFloat(1, takePartInCourse.getScore());
+            st.setString(2, takePartInCourse.getStudentID());
+            st.setString(3, takePartInCourse.getClassID());
+            st.setString(4, takePartInCourse.getLecture());
+            st.setString(5, takePartInCourse.getYear());
+            st.setInt(6, takePartInCourse.getSemester());
+            int rs = st.executeUpdate();
+            return rs;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
@@ -96,24 +112,29 @@ public class TakePartInCourseDAO implements DAOInterface<TakePartInCourse>{
         return res;
     }
 
-    public ArrayList<TakePartInCourse> getAllCourseOfStudent(String id, String year) {
+    public ArrayList<Map<Course, Float>> getAllCourseOfStudent(String id, String year, String username) {
         Connection con = JDBCUtil.getConnection();
-        ArrayList<TakePartInCourse> res = new ArrayList<>();
+        ArrayList<Map<Course, Float>> res = new ArrayList<>();
         try{
-            String url = "SELECT * FROM TAKEPARTINCOURSE WHERE STUID = ? AND YEAR = ?";
+            String url = "SELECT COURSE.*, TAKEPARTINCOURSE.SCORE FROM TAKEPARTINCOURSE JOIN COURSE ON TAKEPARTINCOURSE.COURSEID = COURSE.IDCOURSE AND TAKEPARTINCOURSE.LECTURE = COURSE.LECTURE AND TAKEPARTINCOURSE.YEAR = COURSE.YEAR AND TAKEPARTINCOURSE.SEMESTER = COURSE.SEMESTER JOIN MANAGECOURSE ON MANAGECOURSE.COURSEID = COURSE.IDCOURSE AND MANAGECOURSE.LECTURE = COURSE.LECTURE AND MANAGECOURSE.YEAR = COURSE.YEAR AND MANAGECOURSE.SEMESTER = COURSE.SEMESTER WHERE TAKEPARTINCOURSE.STUID = ? AND TAKEPARTINCOURSE.YEAR = ? AND MANAGECOURSE.USERNAME = ?";
             PreparedStatement st = con.prepareStatement(url);
             st.setString(1, id);
             st.setString(2, year);
+            st.setString(3, username);
             ResultSet rs = st.executeQuery();
             while(rs.next()){
-                String studentID = rs.getString("STUID");
-                String courseID = rs.getString("COURSEID");
+                String idCourse = rs.getString("IDCOURSE");
+                String name = rs.getString("NAME");
                 String lecture = rs.getString("LECTURE");
-                String year1 = rs.getString("YEAR");
+                String yearCourse = rs.getString("YEAR");
                 int semester = rs.getInt("SEMESTER");
-                float grade = rs.getFloat("SCORE");
-                TakePartInCourse takePartInCourse = new TakePartInCourse(studentID, courseID, lecture, year1, semester, grade);
-                res.add(takePartInCourse);
+                String notes = rs.getString("NOTES");
+                int credit = rs.getInt("CREDIT");
+                Course course = new Course(idCourse, name, lecture, yearCourse, semester, notes, credit);
+                float score = rs.getFloat("SCORE");
+                Map<Course, Float> map = new HashMap<>();
+                map.put(course, score);
+                res.add(map);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,6 +205,36 @@ public class TakePartInCourseDAO implements DAOInterface<TakePartInCourse>{
             st.setString(3, lecture);
             st.setString(4, year);
             st.setInt(5, semester);
+            st.executeUpdate();
+            JDBCUtil.closeConnection(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void deleteByID(String studentID) {
+        Connection con = JDBCUtil.getConnection();
+        try{
+            String sql = "DELETE FROM TAKEPARTINCOURSE WHERE STUID = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, studentID);
+            st.executeUpdate();
+            JDBCUtil.closeConnection(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteCourseOfTakePartIn(String id, String lecture, String year, int semester) {
+        Connection con = JDBCUtil.getConnection();
+        try{
+            String sql = "DELETE FROM TAKEPARTINCOURSE WHERE COURSEID = ? AND LECTURE = ? AND YEAR = ? AND SEMESTER = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setString(1, id);
+            st.setString(2, lecture);
+            st.setString(3, year);
+            st.setInt(4, semester);
             st.executeUpdate();
             JDBCUtil.closeConnection(con);
         } catch (Exception e) {

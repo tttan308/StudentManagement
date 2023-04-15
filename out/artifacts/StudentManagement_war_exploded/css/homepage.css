@@ -1,0 +1,9 @@
+@media (max-width: 800px) {
+    .col-2 {
+        display: none;
+    }
+}
+
+.nav-link:active {
+    opacity: 0.6;
+}
